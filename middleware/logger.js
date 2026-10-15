@@ -1,4 +1,4 @@
-
+const {saveLogsToDB} = require ('../controller/employee')
 
 const logger = (req,res, next) => {
     const date = new Date()
