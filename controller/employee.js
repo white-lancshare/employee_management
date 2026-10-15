@@ -15,7 +15,7 @@ const saveToDb = (data) =>{
 
 const saveLogsToDb = (data) =>{
     return new Promise((resolve, reject)=>{
-         fs.appendFile('./model/logger.txt', data, (error, data)=>{
+         fs.appendFile('./model/logger.txt',data, (error, data)=>{
             if (error) {
                 reject('Error writing to File')
             } else{
@@ -26,16 +26,16 @@ const saveLogsToDb = (data) =>{
 }
 
 const allEmployees = (req, res) =>{
-    const user = database;
+    const employee = database;
     res.status(200).json({
-        message: "User Read Successfully",
-        data:user
+        message: "Employee Read Successfully",
+        data:employee
     }) 
 }
 
 const getEmployees = (req, res) => {
     const id = Number(req.params.id);
-    const user = database.find((user) => user.id === id);
+    const employee = database.find((employee) => employee.id === id);
 
     if (!employee) {
         return res.status(404).json({
@@ -45,13 +45,16 @@ const getEmployees = (req, res) => {
 
     res.status(200).json({
         message: 'User Read successfully',
-        data: user
+        data: employee
     });
 };
 
-const newEmployee = async() =>{
+const newEmployee = async(req,res) =>{
     const {name, age, gender, email, phoneNo, department, jobRole} = req.body
-
+    
+    if (typeof(phoneNo) != Number) {
+        return res.status(400).json({message: "Invalid Phone Number"})
+    }
     const employee = {
         id: database.length + 1,
         name,
@@ -62,15 +65,18 @@ const newEmployee = async() =>{
         department,
         jobRole
     }
-    database.push(employee)
-    await  saveToDb(JSON.stringify(database), null, 2)
 
-    res.status(201).json({message: "Employee Created Successfully"})
+    database.push(employee)
+    await  saveToDb(JSON.stringify(database, null, 2))
+
+    res.status(201).json({message: "Employee Created Successfully",
+        data:employee
+    })
 }
 
-const updateEmployee = async() =>{
+const updateEmployee = async(req,res) =>{
     const id = Number(req.params.id);
-    const user = database.find((user)=>user.id === id)
+    const employee = database.find((employee)=>employee.id === id)
 
     if (!employee) {
         return res.status(404).json({
@@ -79,43 +85,43 @@ const updateEmployee = async() =>{
     }
     
     if (req.body.name !== undefined) {
-        user.name = req.body.name
+        employee.name = req.body.name
     }
     
     if (req.body.age !== undefined) {
-        user.age = req.body.age
+        employee.age = req.body.age
     }
 
     if (req.body.gender !== undefined) {
-        user.gender = req.body.gender
+        employee.gender = req.body.gender
     }
 
     if (req.body.email !== undefined) {
-        user.email = req.body.email
+        employee.email = req.body.email
     }
 
     if (req.body.phoneNo !== undefined) {
-        user.phoneNo = req.body.phoneNo
+        employee.phoneNo = req.body.phoneNo
     }
 
     if (req.body.department !== undefined) {
-        user.department = req.body.department
+        employee.department = req.body.department
     }
 
     if (req.body.jobRole !== undefined) {
-        user.jobRole = req.body.jobRole
+        employee.jobRole = req.body.jobRole
     }
     
-    await  saveToDb(JSON.stringify(database), null, 2)
+    await  saveToDb(JSON.stringify(database, null, 2))
 
     res.status(201).json({message: "Employee Updated Successfully",
-        data: user
+        data: employee
     })
 }
 
-const deleteEmployee = async() =>{
+const deleteEmployee = async(req,res) =>{
     const id = Number(req.params.id);
-    const user = database.find((user)=>user.id === id)
+    const employee = database.find((user)=>user.id === id)
 
     if (!employee) {
         return res.status(404).json({
@@ -123,8 +129,8 @@ const deleteEmployee = async() =>{
         })
     }
     
-    database.splice(database.indexOf(user), 1)
-    await  saveToDb(JSON.stringify(database), null, 2)
+    database.splice(database.indexOf(employee), 1)
+    await  saveToDb(JSON.stringify(database, null, 2))
 
     res.status(200).json({message: "Employee Deleted Successfully"})
 }
