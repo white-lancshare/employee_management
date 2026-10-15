@@ -1,1 +1,18 @@
-console.log('hello-team')
+const express = require('express');
+// const router = require("./router/userRouter")
+const port = 3000
+const app = express()
+app.use(express.json())
+
+// app.use(router)
+
+app.listen(port, () => {
+    console.log(`server is running at port ${port}`)
+})
+
+
+
+
+
+
+
