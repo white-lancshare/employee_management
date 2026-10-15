@@ -7,7 +7,7 @@ const {allEmployees,
     deleteEmployee} = require('../controller/employee.js');
 
 
-// const {}=require('../middleware/logger.js');
+const {}=require('../middleware/logger.js');
 
 router.get('/employees', allEmployees);
 router.get('/employees/:id', getEmployees);
