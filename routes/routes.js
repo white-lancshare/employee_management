@@ -7,12 +7,12 @@ const {allEmployees,
     deleteEmployee} = require('../controller/employee.js');
 
 
-const {}=require('../middleware/logger.js');
+const logger =require('../middleware/logger.js');
 
-router.get('/employees', allEmployees);
-router.get('/employees/:id', getEmployees);
-router.post('/employees', newEmployee);
-router.put('/employees/:id', updateEmployee);
-router.delete('/employees/:id', deleteEmployee);
+router.get('/employees', logger, allEmployees);
+router.get('/employees/:id', logger, getEmployees);
+router.post('/employees', logger, newEmployee);
+router.put('/employees/:id', logger, updateEmployee);
+router.delete('/employees/:id', logger, deleteEmployee);
 
 module.exports = router;
